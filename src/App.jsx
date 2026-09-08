@@ -6,10 +6,12 @@ import apiClient from "./api/client";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function Home() {
   const [message, setMessage] = useState("Loading...");
 
+  // Runs once when the page loads, asks the backend for its welcome message
   useEffect(() => {
     apiClient.get("/")
       .then((response) => setMessage(response.data.message))
@@ -33,7 +35,14 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
