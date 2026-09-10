@@ -3,6 +3,7 @@
 import { useState } from "react";
 import apiClient from "../api/client";
 
+
 function Enroll() {
   const [token, setToken] = useState(null);
   const [enrollmentUrl, setEnrollmentUrl] = useState(null);
@@ -32,7 +33,7 @@ function Enroll() {
       {token && (
         <div style={{ marginTop: "24px" }}>
           <img
-            src={`http://127.0.0.1:8000/enrollment/qr/${token}`}
+            src={`${apiClient.defaults.baseURL}/enrollment/qr/${token}`}
             alt="Enrollment QR code"
             style={{ border: "1px solid #ccc", padding: "8px" }}
           />
