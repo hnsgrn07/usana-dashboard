@@ -17,11 +17,17 @@ function Home() {
   }, []);
 
   return (
-    <div style={{ textAlign: "center", marginTop: "40px" }}>
-      <h1>{message}</h1>
-      <p>
-        <Link to="/register">Register</Link> | <Link to="/login">Log In</Link> | <Link to="/enroll">Generate Enrollment QR</Link>
+    <div style={{ maxWidth: "480px", margin: "80px auto", padding: "0 24px" }}>
+      <p style={{ fontSize: "0.85rem", color: "var(--color-blue)", fontWeight: 600, margin: "0 0 4px 0" }}>
+        USANA Personal Coach
       </p>
+      <h1 style={{ fontSize: "2.5rem", marginBottom: "24px" }}>Your daily dose, decided for you.</h1>
+      <p style={{ marginBottom: "32px" }}>{message}</p>
+      <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+        <Link to="/register">Register</Link>
+        <Link to="/login">Log In</Link>
+        <Link to="/enroll">Generate Enrollment QR</Link>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,71 @@
+/* global.css
+   USANA brand-aligned design tokens: navy/blue palette, Montserrat +
+   Georgia typography, flat "personal label" layout style */
+
+:root {
+  --color-bg: #F7F9FB;
+  --color-navy: #003385;
+  --color-blue: #0074CC;
+  --color-lightblue: #69B4E7;
+  --color-gray: #98A4AE;
+  --color-error: #B3432D;
+  --color-border: #D9E1E7;
+
+  --font-heading: Georgia, 'Times New Roman', serif;
+  --font-body: 'Montserrat', -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-navy);
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: var(--color-navy);
+}
+
+a {
+  color: var(--color-blue);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+button {
+  font-family: var(--font-body);
+  font-weight: 600;
+  background-color: var(--color-navy);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button:hover {
+  background-color: var(--color-blue);
+}
+
+input, select, textarea {
+  font-family: var(--font-body);
+  border: 1px solid var(--color-border);
+  padding: 10px;
+  font-size: 1rem;
+  background-color: white;
+  width: 100%;
+}
+
+label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--color-navy);
+}
