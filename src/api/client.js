@@ -5,10 +5,9 @@ import axios from "axios";
 import { getToken } from "../auth";
 
 const apiClient = axios.create({
-  baseURL: "http://127.0.0.1:8000",
+  baseURL: "https://usana-ai-coach.onrender.com",
 });
 
-// Before every request, attach the saved token if we have one
 apiClient.interceptors.request.use((config) => {
   const token = getToken();
   if (token) {
