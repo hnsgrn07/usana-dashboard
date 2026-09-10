@@ -1,15 +1,17 @@
 // Register.jsx
 // Lets someone create an account using an enrollment token (normally from a QR code)
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import apiClient from "../api/client";
 
 function Register() {
+  const [searchParams] = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [enrollmentToken, setEnrollmentToken] = useState("");
+  const [enrollmentToken, setEnrollmentToken] = useState(searchParams.get("token") || "");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
 
   // Runs when the form is submitted
   async function handleSubmit(e) {
