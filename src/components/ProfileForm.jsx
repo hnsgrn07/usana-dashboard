@@ -25,7 +25,6 @@ function ProfileForm({ onSaved }) {
   const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
 
-  // Adds or removes a goal from the selected list when its checkbox is clicked
   function toggleGoal(goal) {
     setHealthGoals((prev) =>
       prev.includes(goal) ? prev.filter((g) => g !== goal) : [...prev, goal]

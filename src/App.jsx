@@ -1,5 +1,3 @@
-// App.jsx
-// Wires up which page shows for which URL
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import apiClient from "./api/client";
@@ -11,7 +9,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 function Home() {
   const [message, setMessage] = useState("Loading...");
 
-  // Runs once when the page loads, asks the backend for its welcome message
   useEffect(() => {
     apiClient.get("/")
       .then((response) => setMessage(response.data.message))

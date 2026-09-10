@@ -1,3 +1,4 @@
+// Dashboard.jsx
 // Shows the logged-in user's profile and recommendations,
 // or a setup form if they haven't created a profile yet
 import { useEffect, useState } from "react";
