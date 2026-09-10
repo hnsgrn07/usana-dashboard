@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Enroll from "./pages/Enroll";
 
 function Home() {
   const [message, setMessage] = useState("Loading...");
@@ -19,7 +20,7 @@ function Home() {
     <div style={{ textAlign: "center", marginTop: "40px" }}>
       <h1>{message}</h1>
       <p>
-        <Link to="/register">Register</Link> | <Link to="/login">Log In</Link>
+        <Link to="/register">Register</Link> | <Link to="/login">Log In</Link> | <Link to="/enroll">Generate Enrollment QR</Link>
       </p>
     </div>
   );
@@ -32,6 +33,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/enroll" element={<Enroll />} />
         <Route
           path="/dashboard"
           element={
