@@ -22,33 +22,53 @@ function Enroll() {
   }
 
   return (
-    <div style={{ maxWidth: "500px", margin: "40px auto", textAlign: "center" }}>
-      <h1>Member Enrollment</h1>
-      <p>Generate a QR code for a new member to scan and register.</p>
+  <div style={{ maxWidth: "480px", margin: "80px auto", padding: "0 24px", textAlign: "center" }}>
+    <p style={{ fontSize: "0.85rem", color: "var(--color-blue)", fontWeight: 600, margin: "0 0 4px 0" }}>
+      For Associates
+    </p>
+    <h1 style={{ fontSize: "2rem", marginBottom: "12px" }}>Member Enrollment</h1>
+    <p style={{ color: "var(--color-gray)", marginBottom: "32px" }}>
+      Generate a QR code for a new member to scan and register.
+    </p>
 
-      <button onClick={handleGenerate}>Generate Enrollment QR</button>
+    <button onClick={handleGenerate}>Generate Enrollment QR</button>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    {error && (
+      <p style={{ color: "var(--color-error)", fontSize: "0.9rem", marginTop: "16px" }}>
+        {error}
+      </p>
+    )}
 
-      {token && (
-        <div style={{ marginTop: "24px" }}>
-          <img
-            src={`${apiClient.defaults.baseURL}/enrollment/qr/${token}`}
-            alt="Enrollment QR code"
-            style={{ border: "1px solid #ccc", padding: "8px" }}
-          />
-          <p style={{ marginTop: "12px", wordBreak: "break-all" }}>
-            <strong>Enrollment link:</strong><br />
-            {enrollmentUrl}
-          </p>
-          <p style={{ fontSize: "0.85em", color: "#888" }}>
-            This token can only be used once — scanning or visiting this link
-            takes a new member to registration.
-          </p>
-        </div>
-      )}
-    </div>
-  );
+    {token && (
+      <div
+        style={{
+          marginTop: "32px",
+          borderLeft: "4px solid var(--color-navy)",
+          backgroundColor: "white",
+          padding: "24px",
+          textAlign: "left",
+        }}
+      >
+        <img
+          src={`${apiClient.defaults.baseURL}/enrollment/qr/${token}`}
+          alt="Enrollment QR code"
+          style={{ display: "block", margin: "0 auto 20px auto" }}
+        />
+        <hr style={{ border: "none", borderTop: "1px solid var(--color-border)", margin: "0 0 16px 0" }} />
+        <p style={{ fontSize: "0.85rem", color: "var(--color-blue)", fontWeight: 600, margin: "0 0 4px 0" }}>
+          Enrollment link
+        </p>
+        <p style={{ wordBreak: "break-all", fontSize: "0.9rem", margin: "0 0 16px 0" }}>
+          {enrollmentUrl}
+        </p>
+        <p style={{ fontSize: "0.8rem", color: "var(--color-gray)", margin: 0 }}>
+          This token can only be used once — scanning or visiting this link
+          takes a new member to registration.
+        </p>
+      </div>
+    )}
+  </div>
+);
 }
 
 export default Enroll;

@@ -1,5 +1,5 @@
 // Dashboard.jsx
-// Shows the logged-in user's profile and recommendations,
+// Shows the logged-in user's profile, AI coaching note, and recommendations,
 // or a setup form if they haven't created a profile yet
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,9 @@ function Dashboard() {
   const [userId, setUserId] = useState(null);
   const [profile, setProfile] = useState(null);
   const [recommendations, setRecommendations] = useState(null);
+  const [coaching, setCoaching] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
   const navigate = useNavigate();
 
   // Find out who's logged in as soon as the page loads
@@ -38,6 +40,7 @@ function Dashboard() {
       .then((response) => {
         setProfile(response.data);
         loadRecommendations(userId);
+        loadCoaching(userId);
       })
       .catch((err) => {
         if (err.response?.status === 404) {
@@ -53,9 +56,17 @@ function Dashboard() {
       .catch(() => setRecommendations(null));
   }
 
+  function loadCoaching(id) {
+    apiClient.get(`/coach/${id}`)
+      .then((response) => setCoaching(response.data.coaching_text))
+      .catch(() => setCoaching(null));
+  }
+
   function handleProfileSaved(savedProfile) {
     setProfile(savedProfile);
+    setEditing(false);
     loadRecommendations(userId);
+    loadCoaching(userId);
   }
 
   function handleLogout() {
@@ -69,14 +80,26 @@ function Dashboard() {
     <div style={{ maxWidth: "700px", margin: "60px auto", padding: "0 24px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "32px" }}>
         <h1 style={{ margin: 0 }}>My Dashboard</h1>
-        <button onClick={handleLogout} style={{ backgroundColor: "transparent", color: "var(--color-blue)", padding: "8px 0" }}>
-          Log Out
-        </button>
+        <div style={{ display: "flex", gap: "16px" }}>
+          {profile && !editing && (
+            <button
+              onClick={() => setEditing(true)}
+              style={{ backgroundColor: "transparent", color: "var(--color-blue)", padding: "8px 0" }}
+            >
+              Edit Profile
+            </button>
+          )}
+          <button onClick={handleLogout} style={{ backgroundColor: "transparent", color: "var(--color-blue)", padding: "8px 0" }}>
+            Log Out
+          </button>
+        </div>
       </div>
 
-      {!profile && <ProfileForm onSaved={handleProfileSaved} />}
+      {(!profile || editing) && (
+        <ProfileForm onSaved={handleProfileSaved} initialData={editing ? profile : null} />
+      )}
 
-      {profile && (
+      {profile && !editing && (
         <div>
           <div style={{ borderLeft: "4px solid var(--color-navy)", paddingLeft: "20px", marginBottom: "32px" }}>
             <p style={{ fontSize: "0.85rem", color: "var(--color-blue)", fontWeight: 600, margin: "0 0 4px 0" }}>
@@ -90,6 +113,22 @@ function Dashboard() {
               {profile.health_goals.map((g) => g.replace(/_/g, " ")).join(" · ")}
             </p>
           </div>
+
+          {coaching && (
+            <div
+              style={{
+                backgroundColor: "white",
+                borderLeft: "4px solid var(--color-blue)",
+                padding: "20px",
+                marginBottom: "32px",
+              }}
+            >
+              <p style={{ fontSize: "0.85rem", color: "var(--color-blue)", fontWeight: 600, margin: "0 0 8px 0" }}>
+                Your Personal Coach
+              </p>
+              <p style={{ margin: 0, whiteSpace: "pre-line", lineHeight: 1.6 }}>{coaching}</p>
+            </div>
+          )}
 
           <h3 style={{ marginBottom: "16px" }}>Your Recommendations</h3>
 

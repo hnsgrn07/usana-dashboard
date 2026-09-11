@@ -61,6 +61,7 @@ input, select, textarea {
   padding: 10px;
   font-size: 1rem;
   background-color: white;
+  color: var(--color-navy);
   width: 100%;
 }
 
