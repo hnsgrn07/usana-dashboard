@@ -1,5 +1,3 @@
-// Login.jsx
-// Lets an existing user log in and stores their token for future requests
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../api/client";
@@ -25,30 +23,40 @@ function Login() {
   }
 
   return (
-    <div style={{ maxWidth: "400px", margin: "40px auto" }}>
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit">Log In</button>
-      </form>
+    <div style={{ maxWidth: "420px", margin: "80px auto", padding: "0 24px" }}>
+      <div style={{ borderLeft: "4px solid var(--color-blue)", paddingLeft: "20px" }}>
+        <p style={{ fontSize: "0.85rem", color: "var(--color-blue)", fontWeight: 600, margin: "0 0 4px 0" }}>
+          Welcome back
+        </p>
+        <h1 style={{ fontSize: "2rem", marginBottom: "24px" }}>Log in</h1>
+
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: "16px" }}>
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div style={{ marginBottom: "24px" }}>
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          {error && (
+            <p style={{ color: "var(--color-error)", fontSize: "0.9rem", marginBottom: "16px" }}>
+              {error}
+            </p>
+          )}
+          <button type="submit" style={{ width: "100%" }}>Log In</button>
+        </form>
+      </div>
     </div>
   );
 }
