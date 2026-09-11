@@ -7,6 +7,12 @@ import apiClient from "../api/client";
 import { clearToken } from "../auth";
 import ProfileForm from "../components/ProfileForm";
 
+const CATEGORY_COLORS = {
+  Essentials: "var(--color-navy)",
+  Optimizers: "var(--color-blue)",
+  Foods: "var(--color-lightblue)",
+};
+
 function Dashboard() {
   const [userId, setUserId] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -57,30 +63,61 @@ function Dashboard() {
     navigate("/login");
   }
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p style={{ textAlign: "center", marginTop: "80px" }}>Loading...</p>;
 
   return (
-    <div style={{ maxWidth: "700px", margin: "40px auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>My Dashboard</h1>
-        <button onClick={handleLogout}>Log Out</button>
+    <div style={{ maxWidth: "700px", margin: "60px auto", padding: "0 24px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "32px" }}>
+        <h1 style={{ margin: 0 }}>My Dashboard</h1>
+        <button onClick={handleLogout} style={{ backgroundColor: "transparent", color: "var(--color-blue)", padding: "8px 0" }}>
+          Log Out
+        </button>
       </div>
 
       {!profile && <ProfileForm onSaved={handleProfileSaved} />}
 
       {profile && (
         <div>
-          <h2>Hi, {profile.full_name}</h2>
-          <p>Age: {profile.age} | Activity: {profile.activity_level.replace(/_/g, " ")}</p>
-          <p>Goals: {profile.health_goals.map((g) => g.replace(/_/g, " ")).join(", ")}</p>
+          <div style={{ borderLeft: "4px solid var(--color-navy)", paddingLeft: "20px", marginBottom: "32px" }}>
+            <p style={{ fontSize: "0.85rem", color: "var(--color-blue)", fontWeight: 600, margin: "0 0 4px 0" }}>
+              Member profile
+            </p>
+            <h2 style={{ fontSize: "1.75rem", margin: "0 0 8px 0" }}>Hi, {profile.full_name}</h2>
+            <p style={{ margin: "4px 0", color: "var(--color-gray)" }}>
+              Age {profile.age} · {profile.activity_level.replace(/_/g, " ")} activity
+            </p>
+            <p style={{ margin: "4px 0" }}>
+              {profile.health_goals.map((g) => g.replace(/_/g, " ")).join(" · ")}
+            </p>
+          </div>
 
-          <h3>Your Recommendations</h3>
-          {recommendations?.status === "no_matches" && <p>No products matched yet.</p>}
+          <h3 style={{ marginBottom: "16px" }}>Your Recommendations</h3>
+
+          {recommendations?.status === "no_matches" && (
+            <p style={{ color: "var(--color-gray)" }}>No products matched yet.</p>
+          )}
+
           {recommendations?.recommendations?.map((rec) => (
-            <div key={rec.id} style={{ border: "1px solid #ccc", padding: "12px", marginBottom: "8px" }}>
-              <strong>{rec.name}</strong> ({rec.category})
-              <p>{rec.dosage}</p>
-              <p>Matched goals: {rec.matched_goals.map((g) => g.replace(/_/g, " ")).join(", ")}</p>
+            <div
+              key={rec.id}
+              style={{
+                borderLeft: `4px solid ${CATEGORY_COLORS[rec.category] || "var(--color-gray)"}`,
+                backgroundColor: "white",
+                padding: "16px 20px",
+                marginBottom: "12px",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                <strong style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }}>{rec.name}</strong>
+                <span style={{ fontSize: "0.75rem", color: CATEGORY_COLORS[rec.category] || "var(--color-gray)", fontWeight: 600 }}>
+                  {rec.category}
+                </span>
+              </div>
+              <p style={{ margin: "8px 0", fontSize: "0.9rem", color: "var(--color-gray)" }}>{rec.dosage}</p>
+              <hr style={{ border: "none", borderTop: "1px solid var(--color-border)", margin: "12px 0" }} />
+              <p style={{ margin: 0, fontSize: "0.85rem" }}>
+                Matched: {rec.matched_goals.map((g) => g.replace(/_/g, " ")).join(", ")}
+              </p>
             </div>
           ))}
         </div>
