@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import apiClient from "../api/client";
 import { clearToken } from "../auth";
 import ProfileForm from "../components/ProfileForm";
+import HabitTracker from "../components/HabitTracker";
 
 const CATEGORY_COLORS = {
   Essentials: "var(--color-navy)",
@@ -100,6 +101,7 @@ function Dashboard() {
       )}
 
       {profile && !editing && (
+        
         <div>
           <div style={{ borderLeft: "4px solid var(--color-navy)", paddingLeft: "20px", marginBottom: "32px" }}>
             <p style={{ fontSize: "0.85rem", color: "var(--color-blue)", fontWeight: 600, margin: "0 0 4px 0" }}>
@@ -113,6 +115,8 @@ function Dashboard() {
               {profile.health_goals.map((g) => g.replace(/_/g, " ")).join(" · ")}
             </p>
           </div>
+
+          <HabitTracker />
 
           {coaching && (
             <div
