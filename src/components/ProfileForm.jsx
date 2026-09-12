@@ -1,8 +1,7 @@
 // ProfileForm.jsx
-// Lets someone fill out their health profile — used both for first-time
-// setup (no initialData) and editing an existing profile (initialData passed in)
 import { useState } from "react";
 import apiClient from "../api/client";
+import { GOAL_ICONS } from "../utils/goalIcons";
 
 const HEALTH_GOALS = [
   "energy_support", "immune_support", "joint_support", "digestive_health",
@@ -47,7 +46,7 @@ function ProfileForm({ onSaved, initialData }) {
 
     try {
       const response = await apiClient.post("/profile", {
-        user_id: "placeholder", // backend replaces this with the real logged-in user id
+        user_id: "placeholder",
         full_name: fullName,
         age: parseInt(age),
         gender,
@@ -68,26 +67,22 @@ function ProfileForm({ onSaved, initialData }) {
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: "500px", margin: "0 auto" }}>
-      <div style={{ borderLeft: "4px solid var(--color-blue)", paddingLeft: "20px", marginBottom: "24px" }}>
-        <p style={{ fontSize: "0.85rem", color: "var(--color-blue)", fontWeight: 600, margin: "0 0 4px 0" }}>
-          {initialData ? "Update your info" : "First-time setup"}
-        </p>
-        <h2 style={{ fontSize: "1.75rem", margin: 0 }}>
-          {initialData ? "Edit your health profile" : "Set up your health profile"}
-        </h2>
+      <div className="panel-accent" style={{ marginBottom: "var(--space-5)" }}>
+        <p className="eyebrow">{initialData ? "Update your info" : "First-time setup"}</p>
+        <h2>{initialData ? "Edit your health profile" : "Set up your health profile"}</h2>
       </div>
 
-      <div style={{ marginBottom: "16px" }}>
+      <div className="field">
         <label>Full Name</label>
         <input value={fullName} onChange={(e) => setFullName(e.target.value)} required />
       </div>
 
-      <div style={{ marginBottom: "16px" }}>
+      <div className="field">
         <label>Age</label>
         <input type="number" value={age} onChange={(e) => setAge(e.target.value)} required />
       </div>
 
-      <div style={{ marginBottom: "16px" }}>
+      <div className="field">
         <label>Gender</label>
         <select value={gender} onChange={(e) => setGender(e.target.value)}>
           <option value="male">Male</option>
@@ -97,18 +92,18 @@ function ProfileForm({ onSaved, initialData }) {
         </select>
       </div>
 
-      <div style={{ display: "flex", gap: "16px", marginBottom: "16px" }}>
-        <div style={{ flex: 1 }}>
+      <div style={{ display: "flex", gap: "var(--space-4)" }}>
+        <div className="field" style={{ flex: 1 }}>
           <label>Weight (kg)</label>
           <input type="number" step="0.1" value={weightKg} onChange={(e) => setWeightKg(e.target.value)} required />
         </div>
-        <div style={{ flex: 1 }}>
+        <div className="field" style={{ flex: 1 }}>
           <label>Height (cm)</label>
           <input type="number" step="0.1" value={heightCm} onChange={(e) => setHeightCm(e.target.value)} required />
         </div>
       </div>
 
-      <div style={{ marginBottom: "24px" }}>
+      <div className="field">
         <label>Activity Level</label>
         <select value={activityLevel} onChange={(e) => setActivityLevel(e.target.value)}>
           <option value="sedentary">Sedentary</option>
@@ -119,25 +114,19 @@ function ProfileForm({ onSaved, initialData }) {
         </select>
       </div>
 
-      <div style={{ marginBottom: "24px" }}>
+      <div className="field">
         <label>Health Goals (pick at least one)</label>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)", marginTop: "var(--space-2)" }}>
           {HEALTH_GOALS.map((goal) => {
             const checked = healthGoals.includes(goal);
+            const Icon = GOAL_ICONS[goal];
             return (
               <label
                 key={goal}
                 onClick={() => toggleGoal(goal)}
-                style={{
-                  fontSize: "0.85rem",
-                  padding: "6px 12px",
-                  border: `1px solid ${checked ? "var(--color-navy)" : "var(--color-border)"}`,
-                  backgroundColor: checked ? "var(--color-navy)" : "white",
-                  color: checked ? "white" : "var(--color-navy)",
-                  cursor: "pointer",
-                  fontWeight: 500,
-                }}
+                className={`chip ${checked ? "selected" : ""}`}
               >
+                <Icon size={14} />
                 {goal.replace(/_/g, " ")}
               </label>
             );
@@ -145,24 +134,16 @@ function ProfileForm({ onSaved, initialData }) {
         </div>
       </div>
 
-      <div style={{ marginBottom: "24px" }}>
+      <div className="field">
         <label>Dietary Restrictions</label>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)", marginTop: "var(--space-2)" }}>
           {DIETARY_RESTRICTIONS.map((restriction) => {
             const checked = dietaryRestrictions.includes(restriction);
             return (
               <label
                 key={restriction}
                 onClick={() => toggleRestriction(restriction)}
-                style={{
-                  fontSize: "0.85rem",
-                  padding: "6px 12px",
-                  border: `1px solid ${checked ? "var(--color-blue)" : "var(--color-border)"}`,
-                  backgroundColor: checked ? "var(--color-blue)" : "white",
-                  color: checked ? "white" : "var(--color-navy)",
-                  cursor: "pointer",
-                  fontWeight: 500,
-                }}
+                className={`chip ${checked ? "selected" : ""}`}
               >
                 {restriction.replace(/_/g, " ")}
               </label>
@@ -171,17 +152,13 @@ function ProfileForm({ onSaved, initialData }) {
         </div>
       </div>
 
-      <div style={{ marginBottom: "24px" }}>
+      <div className="field">
         <label>Notes</label>
         <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} />
       </div>
 
-      {error && (
-        <p style={{ color: "var(--color-error)", fontSize: "0.9rem", marginBottom: "16px" }}>
-          {error}
-        </p>
-      )}
-      <button type="submit" style={{ width: "100%" }}>
+      {error && <p style={{ color: "var(--color-error)", fontSize: "var(--text-sm)" }}>{error}</p>}
+      <button type="submit" className="btn btn-full">
         {initialData ? "Save Changes" : "Save Profile"}
       </button>
     </form>

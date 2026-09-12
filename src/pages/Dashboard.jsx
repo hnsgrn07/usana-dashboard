@@ -1,6 +1,4 @@
 // Dashboard.jsx
-// Shows the logged-in user's profile, AI coaching note, and recommendations,
-// or a setup form if they haven't created a profile yet
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../api/client";
@@ -9,6 +7,7 @@ import ProfileForm from "../components/ProfileForm";
 import HabitTracker from "../components/HabitTracker";
 import ProgressChart from "../components/ProgressChart";
 import ChatCoach from "../components/ChatCoach";
+import { GOAL_ICONS } from "../utils/goalIcons";
 
 const CATEGORY_COLORS = {
   Essentials: "var(--color-navy)",
@@ -25,7 +24,6 @@ function Dashboard() {
   const [editing, setEditing] = useState(false);
   const navigate = useNavigate();
 
-  // Find out who's logged in as soon as the page loads
   useEffect(() => {
     apiClient.get("/me")
       .then((response) => setUserId(response.data.user_id))
@@ -35,7 +33,6 @@ function Dashboard() {
       });
   }, [navigate]);
 
-  // Once we know the user's id, try to load their saved profile
   useEffect(() => {
     if (!userId) return;
 
@@ -46,9 +43,7 @@ function Dashboard() {
         loadCoaching(userId);
       })
       .catch((err) => {
-        if (err.response?.status === 404) {
-          setProfile(null); // no profile saved yet, show the setup form instead
-        }
+        if (err.response?.status === 404) setProfile(null);
       })
       .finally(() => setLoading(false));
   }, [userId]);
@@ -77,24 +72,17 @@ function Dashboard() {
     navigate("/login");
   }
 
-  if (loading) return <p style={{ textAlign: "center", marginTop: "80px" }}>Loading...</p>;
+  if (loading) return <p style={{ textAlign: "center", marginTop: "var(--space-8)" }}>Loading...</p>;
 
   return (
-    <div style={{ maxWidth: "700px", margin: "60px auto", padding: "0 24px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "32px" }}>
+    <div style={{ maxWidth: "700px", margin: "0 auto", padding: "var(--space-7) var(--space-5) var(--space-5)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "var(--space-6)" }}>
         <h1 style={{ margin: 0 }}>My Dashboard</h1>
-        <div style={{ display: "flex", gap: "16px" }}>
+        <div style={{ display: "flex", gap: "var(--space-4)" }}>
           {profile && !editing && (
-            <button
-              onClick={() => setEditing(true)}
-              style={{ backgroundColor: "transparent", color: "var(--color-blue)", padding: "8px 0" }}
-            >
-              Edit Profile
-            </button>
+            <button onClick={() => setEditing(true)} className="btn-ghost">Edit Profile</button>
           )}
-          <button onClick={handleLogout} style={{ backgroundColor: "transparent", color: "var(--color-blue)", padding: "8px 0" }}>
-            Log Out
-          </button>
+          <button onClick={handleLogout} className="btn-ghost">Log Out</button>
         </div>
       </div>
 
@@ -103,43 +91,39 @@ function Dashboard() {
       )}
 
       {profile && !editing && (
-        
         <div>
-          <div style={{ borderLeft: "4px solid var(--color-navy)", paddingLeft: "20px", marginBottom: "32px" }}>
-            <p style={{ fontSize: "0.85rem", color: "var(--color-blue)", fontWeight: 600, margin: "0 0 4px 0" }}>
-              Member profile
-            </p>
-            <h2 style={{ fontSize: "1.75rem", margin: "0 0 8px 0" }}>Hi, {profile.full_name}</h2>
-            <p style={{ margin: "4px 0", color: "var(--color-gray)" }}>
+          <div className="panel-accent" style={{ marginBottom: "var(--space-6)" }}>
+            <p className="eyebrow">Member profile</p>
+            <h2>Hi, {profile.full_name}</h2>
+            <p style={{ color: "var(--color-gray)", marginBottom: "var(--space-2)" }}>
               Age {profile.age} · {profile.activity_level.replace(/_/g, " ")} activity
             </p>
-            <p style={{ margin: "4px 0" }}>
-              {profile.health_goals.map((g) => g.replace(/_/g, " ")).join(" · ")}
-            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}>
+              {profile.health_goals.map((g) => {
+                const Icon = GOAL_ICONS[g];
+                return (
+                  <span key={g} className="chip selected">
+                    <Icon size={14} />
+                    {g.replace(/_/g, " ")}
+                  </span>
+                );
+              })}
+            </div>
           </div>
 
           <HabitTracker />
           <ProgressChart userId={userId} />
 
           {coaching && (
-            <div
-              style={{
-                backgroundColor: "white",
-                borderLeft: "4px solid var(--color-blue)",
-                padding: "20px",
-                marginBottom: "32px",
-              }}
-            >
-              <p style={{ fontSize: "0.85rem", color: "var(--color-blue)", fontWeight: 600, margin: "0 0 8px 0" }}>
-                Your Personal Coach
-              </p>
-              <p style={{ margin: 0, whiteSpace: "pre-line", lineHeight: 1.6 }}>{coaching}</p>
+            <div className="panel panel-accent blue">
+              <p className="eyebrow">Your Personal Coach</p>
+              <p style={{ whiteSpace: "pre-line", lineHeight: 1.6, marginBottom: 0 }}>{coaching}</p>
             </div>
           )}
 
           <ChatCoach userId={userId} />
 
-          <h3 style={{ marginBottom: "16px" }}>Your Recommendations</h3>
+          <h3 style={{ marginBottom: "var(--space-4)" }}>Your Recommendations</h3>
 
           {recommendations?.status === "no_matches" && (
             <p style={{ color: "var(--color-gray)" }}>No products matched yet.</p>
@@ -148,22 +132,18 @@ function Dashboard() {
           {recommendations?.recommendations?.map((rec) => (
             <div
               key={rec.id}
-              style={{
-                borderLeft: `4px solid ${CATEGORY_COLORS[rec.category] || "var(--color-gray)"}`,
-                backgroundColor: "white",
-                padding: "16px 20px",
-                marginBottom: "12px",
-              }}
+              className="panel"
+              style={{ borderLeft: `4px solid ${CATEGORY_COLORS[rec.category] || "var(--color-gray)"}`, marginBottom: "var(--space-3)" }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                <strong style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }}>{rec.name}</strong>
-                <span style={{ fontSize: "0.75rem", color: CATEGORY_COLORS[rec.category] || "var(--color-gray)", fontWeight: 600 }}>
+                <strong style={{ fontFamily: "var(--font-heading)", fontSize: "var(--text-lg)" }}>{rec.name}</strong>
+                <span style={{ fontSize: "var(--text-xs)", color: CATEGORY_COLORS[rec.category] || "var(--color-gray)", fontWeight: 600 }}>
                   {rec.category}
                 </span>
               </div>
-              <p style={{ margin: "8px 0", fontSize: "0.9rem", color: "var(--color-gray)" }}>{rec.dosage}</p>
-              <hr style={{ border: "none", borderTop: "1px solid var(--color-border)", margin: "12px 0" }} />
-              <p style={{ margin: 0, fontSize: "0.85rem" }}>
+              <p style={{ fontSize: "var(--text-sm)", color: "var(--color-gray)" }}>{rec.dosage}</p>
+              <hr className="divider" />
+              <p style={{ fontSize: "var(--text-sm)", marginBottom: 0 }}>
                 Matched: {rec.matched_goals.map((g) => g.replace(/_/g, " ")).join(", ")}
               </p>
             </div>
