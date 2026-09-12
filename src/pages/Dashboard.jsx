@@ -8,6 +8,7 @@ import { clearToken } from "../auth";
 import ProfileForm from "../components/ProfileForm";
 import HabitTracker from "../components/HabitTracker";
 import ProgressChart from "../components/ProgressChart";
+import ChatCoach from "../components/ChatCoach";
 
 const CATEGORY_COLORS = {
   Essentials: "var(--color-navy)",
@@ -135,6 +136,8 @@ function Dashboard() {
               <p style={{ margin: 0, whiteSpace: "pre-line", lineHeight: 1.6 }}>{coaching}</p>
             </div>
           )}
+
+          <ChatCoach userId={userId} />
 
           <h3 style={{ marginBottom: "16px" }}>Your Recommendations</h3>
 
