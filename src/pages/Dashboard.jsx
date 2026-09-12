@@ -7,6 +7,7 @@ import apiClient from "../api/client";
 import { clearToken } from "../auth";
 import ProfileForm from "../components/ProfileForm";
 import HabitTracker from "../components/HabitTracker";
+import ProgressChart from "../components/ProgressChart";
 
 const CATEGORY_COLORS = {
   Essentials: "var(--color-navy)",
@@ -117,6 +118,7 @@ function Dashboard() {
           </div>
 
           <HabitTracker />
+          <ProgressChart userId={userId} />
 
           {coaching && (
             <div
